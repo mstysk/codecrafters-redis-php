@@ -1,6 +1,8 @@
 <?php
 error_reporting(E_ALL);
 
+require_once __DIR__ . '/ArrayInput.php';
+
 // You can use print statements as follows for debugging, they'll be visible when running tests.
 //echo "Logs from your program will appear here";
 
@@ -15,12 +17,13 @@ $write = null;
 $expect = null;
 $second = 0;
 
+$resp = new Resp();
+
 while(true) {
     $read = $clients;
     $selected  = socket_select($read, $write, $expect, $second);
     if ($selected === false) {
         echo 'socket select is failed.';
-        var_dump([$clients, $write, $expect]);
         break;
     }
     if ($selected  <= 0 ){
@@ -38,18 +41,49 @@ while(true) {
         unset($read[$key]);
     }
     foreach($read as $readSock) {
-        $mess = socket_read($readSock, 2048, PHP_NORMAL_READ);
+        $mess = socket_read($readSock, 2048);
         if ($mess === false) {
             $key = array_search($readSock, $clients);
             unset($clients[$key]);
             echo "client disconnected.\n";
             continue;
         }
-        $mess = trim($mess);
-        if ($mess == "ping") {
-            $response = "+PONG\r\n";
+        $response = $resp->decode($mess);
+        if($response instanceof ArrayInput) {
             socket_write($readSock, $response, strlen($response));
         }
     }
 }
 socket_close($sock);
+
+
+class Resp
+{
+    private const CRLF = "\r\n";
+
+    /**
+     * @return ArrayInput|array
+     */
+    public function decode(string $str)
+    {
+        $input = array_filter(explode(self::CRLF, $str));
+        $head = array_shift($input);
+        switch(substr($head, 0, 1)) {
+            case '*':
+                return new ArrayInput($input);
+            case '-':
+                echo 'error';
+                break;
+            case '+':
+                echo 'string';
+                break;
+            case ':':
+                echo 'integer';
+                break;
+            case '$':
+                echo 'bulk string';
+                break;
+        }
+        return array_chunk($input, 2);
+    }
+}
