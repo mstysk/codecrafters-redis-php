@@ -1,8 +1,8 @@
 <?php
 error_reporting(E_ALL);
 
-require_once __DIR__ . '/ArrayInput.php';
-require_once __DIR__ . '/Decoder.php';
+require_once __DIR__ . '/../src/ArrayInput.php';
+require_once __DIR__ . '/../src/Decoder.php';
 
 // You can use print statements as follows for debugging, they'll be visible when running tests.
 //echo "Logs from your program will appear here";
