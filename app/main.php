@@ -5,6 +5,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Mstysk\RedisPhp\ArrayInput;
 use Mstysk\RedisPhp\Decoder;
+use Mstysk\RedisPhp\Storage;
 
 // You can use print statements as follows for debugging, they'll be visible when running tests.
 //echo "Logs from your program will appear here";
@@ -20,7 +21,8 @@ $write = null;
 $expect = null;
 $second = 0;
 
-$decoder = new Decoder();
+$storage = new Storage();
+$decoder = new Decoder($storage);
 
 while(true) {
     $read = $clients;
