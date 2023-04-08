@@ -2,6 +2,7 @@
 error_reporting(E_ALL);
 
 require_once __DIR__ . '/ArrayInput.php';
+require_once __DIR__ . '/Decoder.php';
 
 // You can use print statements as follows for debugging, they'll be visible when running tests.
 //echo "Logs from your program will appear here";
@@ -17,7 +18,7 @@ $write = null;
 $expect = null;
 $second = 0;
 
-$resp = new Resp();
+$decoder = new Decoder();
 
 while(true) {
     $read = $clients;
@@ -48,42 +49,10 @@ while(true) {
             echo "client disconnected.\n";
             continue;
         }
-        $response = $resp->decode($mess);
+        $response = $decoder->decode($mess);
         if($response instanceof ArrayInput) {
             socket_write($readSock, $response, strlen($response));
         }
     }
 }
 socket_close($sock);
-
-
-class Resp
-{
-    private const CRLF = "\r\n";
-
-    /**
-     * @return ArrayInput|array
-     */
-    public function decode(string $str)
-    {
-        $input = array_filter(explode(self::CRLF, $str));
-        $head = array_shift($input);
-        switch(substr($head, 0, 1)) {
-            case '*':
-                return new ArrayInput($input);
-            case '-':
-                echo 'error';
-                break;
-            case '+':
-                echo 'string';
-                break;
-            case ':':
-                echo 'integer';
-                break;
-            case '$':
-                echo 'bulk string';
-                break;
-        }
-        return array_chunk($input, 2);
-    }
-}
