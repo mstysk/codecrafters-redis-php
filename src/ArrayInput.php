@@ -35,9 +35,13 @@ final class ArrayInput
                 return "+OK\r\n";
             case 'get':
                 $key = $this->input[3];
+                $value = $this->storage->get($key);
+                if (is_null($value)) {
+                    return "*0\r\n";
+                }
                 return "+{$this->storage->get($key)}\r\n";
             default:
-                return '';
+                return "*0\r\n";
         }
     }
 }

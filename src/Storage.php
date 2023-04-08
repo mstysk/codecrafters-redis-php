@@ -13,11 +13,11 @@ final class Storage
         $this->data[$key] = $value;
     }
 
-    public function get(string $key): string
+    public function get(string $key): ?string
     {
         if($this->data[$key]) {
             return $this->data[$key];
         }
-        return '';
+        return null;
     }
 }
