@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
+namespace Mstysk\RedisPhp;
+
 final class ArrayInput
 {
     private string $control;

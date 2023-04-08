@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Mstysk\RedisPhp;
+
 final class Decoder 
 {
     private const CRLF = "\r\n";

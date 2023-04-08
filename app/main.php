@@ -2,8 +2,9 @@
 error_reporting(E_ALL);
 
 require __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/../src/ArrayInput.php';
-require_once __DIR__ . '/../src/Decoder.php';
+
+use Mstysk\RedisPhp\ArrayInput;
+use Mstysk\RedisPhp\Decoder;
 
 // You can use print statements as follows for debugging, they'll be visible when running tests.
 //echo "Logs from your program will appear here";
