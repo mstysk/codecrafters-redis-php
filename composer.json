@@ -1,0 +1,15 @@
+{
+    "name": "mstysk/redis-php",
+    "autoload": {
+        "psr-4": {
+            "Mstysk\\RedisPhp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Masato Yoshioka",
+            "email": "yoshioka0627@gmail.com"
+        }
+    ],
+    "require": {}
+}
