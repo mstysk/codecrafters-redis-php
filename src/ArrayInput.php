@@ -8,6 +8,7 @@ final class ArrayInput
 {
     private string $control;
     private array $input;
+    private Storage $storage;
 
     /**
      * @param array<string, string> $input
@@ -31,7 +32,11 @@ final class ArrayInput
             case 'set':
                 $key = $this->input[3];
                 $value = $this->input[5];
-                $this->storage->set($key, $value);
+                $data = new DataSet(
+                    $key,
+                    $value
+                );
+                $this->storage->set($data);
                 return "+OK\r\n";
             case 'get':
                 $key = $this->input[3];

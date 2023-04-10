@@ -6,17 +6,20 @@ namespace Mstysk\RedisPhp;
 
 final class Storage
 {
-    private array $data;
+    /** @var array<DataSet> */
+    private array $dataList;
 
-    public function set(string $key, string $value): void
+    public function set(DataSet $data): void
     {
-        $this->data[$key] = $value;
+        $this->dataList[] = $data;
     }
 
     public function get(string $key): ?string
     {
-        if($this->data[$key]) {
-            return $this->data[$key];
+        foreach($this->dataList as $data) {
+            if ($data->exists($key)) {
+                return $data->get();
+            }
         }
         return null;
     }
