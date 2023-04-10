@@ -53,7 +53,12 @@ while(true) {
             echo "client disconnected.\n";
             continue;
         }
-        $response = $decoder->decode($mess);
+        try {
+            $response = $decoder->decode($mess);
+        } catch (Exception $e) {
+            $response = '-Error\r\n';
+            socket_write($readSock, $response, strlen($response));
+        }
         if($response instanceof ArrayInput) {
             socket_write($readSock, $response, strlen($response));
         }

@@ -32,9 +32,11 @@ final class ArrayInput
             case 'set':
                 $key = $this->input[3];
                 $value = $this->input[5];
+                $expired = Expired::createFromInputArray($this->input);
                 $data = new DataSet(
                     $key,
-                    $value
+                    $value,
+                    $expired
                 );
                 $this->storage->set($data);
                 return "+OK\r\n";
@@ -42,7 +44,7 @@ final class ArrayInput
                 $key = $this->input[3];
                 $value = $this->storage->get($key);
                 if (is_null($value)) {
-                    return "*0\r\n";
+                    return "$-1\r\n";
                 }
                 return "+{$this->storage->get($key)}\r\n";
             default:
